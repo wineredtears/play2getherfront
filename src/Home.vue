@@ -1,14 +1,17 @@
 <template>
-  <!--  <header>
+  <header>
     <title2>"Hello world!"</title2>
     <button @click="getTopics">FUCK</button>
-  </header>  -->
+  </header>
   <div class="app">
     <Header />
     <main class="content">
-      <router-view />
+      <router-view /> <!-- this shows your page content -->
     </main>
   </div>
+  <main>
+
+  </main>
 </template>
 
 <script setup>
@@ -35,7 +38,6 @@ header {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  width: 100vw;
 }
 
 .content {
