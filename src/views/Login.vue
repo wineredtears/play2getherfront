@@ -13,6 +13,10 @@
         </div>
         <button type="submit">Login</button>
       </form>
+      <div class="register-link">
+        <p>Don't have an account?</p>
+        <router-link to="/register" class="register-button">Register</router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -91,6 +95,21 @@ button {
   border: none;
   color: white;
   cursor: pointer;
+  border-radius: 4px;
+
+}
+.register-link {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.register-button {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #3b82f6;
+  color: white;
+  text-decoration: none;
   border-radius: 4px;
 }
 </style>
