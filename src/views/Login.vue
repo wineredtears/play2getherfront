@@ -1,115 +1,75 @@
 <template>
-  <div class="login-container">
-    <div class="login-page">
-      <h1>Login</h1>
-      <form @submit.prevent="handleLogin">
-        <div>
-          <label for="username">Username:</label>
-          <input v-model="username" type="text" id="username" required />
+  <div class="home col-5 mx-auto py-5 mt-5">
+    <h1 class="text-center">Login</h1>
+    <div class="card">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input
+              type="text"
+              v-model="form.name"
+              class="form-control"
+              id="name"
+          />
+          <span class="text-danger" v-if="errors.name">
+            {{ errors.name[0] }}
+          </span>
         </div>
-        <div>
+        <div class="form-group">
           <label for="password">Password:</label>
-          <input v-model="password" type="password" id="password" required />
+          <input
+              type="password"
+              v-model="form.password"
+              class="form-control"
+              id="password"
+          />
+          <span class="text-danger" v-if="errors.password">
+            {{ errors.password[0] }}
+          </span>
         </div>
-        <button type="submit">Login</button>
-      </form>
-      <div class="register-link">
-        <p>Don't have an account?</p>
-        <router-link to="/register" class="register-button">Register</router-link>
+        <button @click.prevent="login" class="btn btn-primary btn-block">
+          Login
+        </button>
       </div>
+    </div>
+    <div class="register-link">
+      <p>Don't have an account?</p>
+      <router-link to="/register" class="register-button">Register</router-link>
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue'
-import axios from "axios"
-
-const username = ref('')
-const password = ref('')
-
-async function handleLogin() {
-  try {
-    const response = await axios.post('http://play2gether.local/api/auth/login', {
-      name: username.value,
-      password: password.value
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
+<script>
+import User from "../apis/User";
+import {AUTH_TOKEN, IS_AUTHENTICATED} from "@/constants/localStorage.js";
+export default {
+  data() {
+    return {
+      form: {
+        name: "",  // Change email to name
+        password: ""
       },
-      withCredentials: true
-    })
+      errors: []
+    };
+  },
+  methods: {
+    login() {
+      // Sending name and password in the login request
+      User.login(this.form)
+          .then((response) => {
+            this.$root.$emit("login", true);
+            localStorage.setItem(IS_AUTHENTICATED, "true");
+            localStorage.setItem(AUTH_TOKEN, response.data.token)
 
-    console.log('Login response:', response)
-
-    if (response.status === 204) {
-      localStorage.setItem('auth-user', username.value)
-      window.location.href = '/'
+            window.postMessage('auth-action')
+            this.$router.push({ name: "Home" });
+          })
+          .catch(error => {
+            if (error.response.status === 422) {
+              this.errors = error.response.data.errors;
+            }
+          });
     }
-  } catch (error) {
-    console.error('Login failed:', error.response?.data || error.message)
-    alert('Login failed. Please check your credentials.')
   }
-}
+};
 </script>
 
-<style scoped>
-/* Full-screen flexbox container */
-.login-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh; /* Full viewport height */
-  width: 80%;
-  background-color: #e2e8f0; /* Optional background */
-}
-
-.login-page {
-  width: 100%;
-  max-width: 400px;
-  padding: 2rem;
-  background: #f4f4f4;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-form div {
-  margin-bottom: 1rem;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-input {
-  width: 100%;
-  padding: 0.5rem;
-  box-sizing: border-box;
-}
-
-button {
-  padding: 0.5rem 1rem;
-  background-color: #3b82f6;
-  border: none;
-  color: white;
-  cursor: pointer;
-  border-radius: 4px;
-
-}
-.register-link {
-  margin-top: 1rem;
-  text-align: center;
-}
-
-.register-button {
-  display: inline-block;
-  margin-top: 0.5rem;
-  padding: 0.5rem 1rem;
-  background-color: #3b82f6;
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-}
-</style>

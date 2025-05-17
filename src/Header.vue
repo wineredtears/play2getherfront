@@ -18,28 +18,69 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import Csrf from "@/apis/Csrf.js";
+import axios from "axios";
+import {AUTH_TOKEN, IS_AUTHENTICATED} from "@/constants/localStorage.js";
+import Router from "@/router/index.js";
 
 const username = ref('')
 const isLoggedIn = ref(false)
 const router = useRouter()
 
-const checkLogin = () => {
-  const stored = localStorage.getItem('auth-user')
-  if (stored) {
-    username.value = stored
-    isLoggedIn.value = true
-  } else {
-    isLoggedIn.value = false
-    username.value = ''
+const checkLogin = async () => {
+  const authToken = localStorage.getItem(AUTH_TOKEN);
+
+  if (!authToken) {
+    fail();
   }
+
+  try {
+    // Ensure CSRF cookie is set (only needed if not already)
+    await Csrf.getCookie();
+
+    const response = await axios.get('http://play2gether.local/api/user', {
+      withCredentials: true, // Important for Laravel Sanctum
+      headers: {Authorization: `Bearer ${authToken}`}
+    });
+
+    username.value = response.data.name || response.data.username || 'User';
+    isLoggedIn.value = true;
+
+  } catch (error) {
+    console.error('Not authenticated:', error.response?.data || error.message);
+    fail();
+  }
+};
+
+const fail = () => {
+  isLoggedIn.value = false;
+  username.value = '';
 }
 
-const logout = () => {
-  localStorage.removeItem('auth-user')
-  isLoggedIn.value = false
-  username.value = ''
-  router.push('/login')
+const logout = async () => {
+  axios.post('http://play2gether.local/api/auth/logout', null,{
+    withCredentials: true, // Important for Laravel Sanctum
+    headers: {Authorization: `Bearer ${localStorage.getItem(AUTH_TOKEN)}`}
+  }).then(()=>{
+    isLoggedIn.value = false;
+    username.value = '';
+    localStorage.removeItem(AUTH_TOKEN);
+    localStorage.removeItem(IS_AUTHENTICATED);
+
+    router.push('/login');
+  })
 }
+
+window.addEventListener(
+    "message",
+    (event) => {
+      if (event.data !== 'auth-action') return;
+
+      console.log(event);
+      checkLogin()
+    },
+    false,
+);
 
 onMounted(() => {
   checkLogin()

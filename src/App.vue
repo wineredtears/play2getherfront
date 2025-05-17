@@ -9,6 +9,9 @@
       <router-view />
     </main>
   </div>
+  <div v-if="authenticated">
+    Hello {{ user.name }}!
+  </div>
 </template>
 
 <script setup>
@@ -25,6 +28,10 @@ const getTopics = async ()=>{
     }
   })).data)
 }
+import useAuth from '/src/useAuth.js'
+
+const { authenticated, user } = useAuth()
+
 </script>
 
 <style scoped>
