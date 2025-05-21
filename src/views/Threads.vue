@@ -157,14 +157,24 @@ const newThreadName = ref('')
   padding: 0.75rem;
   border: 1px solid #d1d5db;
   width: 75%;
-  border-radius: 8px;
   list-style-type: none;
+  background-color: #e5e7eb;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #111827;
+  font-weight: 500;
+  transition: background-color 0.2s;
 }
 .create-thread-form {
-  margin-top: 2rem;
-  padding: 1.5rem;
+  margin: 2rem;
+  padding: 2rem;
   border: 1px solid #d1d5db;
-  border-radius: 8px;
+  background-color: #e5e7eb;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #111827;
+  font-weight: 500;
+  transition: background-color 0.2s;
   width: 60%
 }
 

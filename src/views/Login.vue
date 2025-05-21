@@ -40,7 +40,8 @@
 </template>
 <script>
 import User from "../apis/User";
-import {AUTH_TOKEN, IS_AUTHENTICATED} from "@/constants/localStorage.js";
+import {AUTH_TOKEN, CURRENT_USER_ID, IS_AUTHENTICATED} from "@/constants/localStorage.js";
+import axios from "axios";
 export default {
   data() {
     return {
@@ -55,13 +56,19 @@ export default {
     login() {
       // Sending name and password in the login request
       User.login(this.form)
-          .then((response) => {
+          .then(async (response) => {
             this.$root.$emit("login", true);
             localStorage.setItem(IS_AUTHENTICATED, "true");
             localStorage.setItem(AUTH_TOKEN, response.data.token)
+            const currentUser = await axios.get('http://play2gether.local/api/user', {
+              withCredentials: true, // Important for Laravel Sanctum
+              headers: {Authorization: `Bearer ${localStorage.getItem(AUTH_TOKEN)}`}
+            });
+            localStorage.setItem(CURRENT_USER_ID, currentUser.data.id);
+
 
             window.postMessage('auth-action')
-            this.$router.push({ name: "Home" });
+            this.$router.push({name: "Home"});
           })
           .catch(error => {
             if (error.response.status === 422) {
@@ -72,4 +79,11 @@ export default {
   }
 };
 </script>
+<style>
+.register-link {
+  background-color: aliceblue;
+  color: #111827;
+}
+
+</style>
 

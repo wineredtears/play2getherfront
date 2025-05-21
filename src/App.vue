@@ -1,4 +1,5 @@
 <template>
+  <body>
   <!--  <header>
     <title2>"Hello world!"</title2>
     <button @click="getTopics">FUCK</button>
@@ -12,6 +13,7 @@
   <div v-if="authenticated">
     Hello {{ user.name }}!
   </div>
+  </body>
 </template>
 
 <script setup>
@@ -46,7 +48,12 @@ header {
 }
 
 .content {
-  flex: 1;
-  padding: 20px;
+
+}
+body {
+  color: white;
+  background-image: url("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwallpapers.com%2Fimages%2Fhd%2Faesthetic-pixel-art-hd-kzdwtvh6bdsyvjv7.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 </style>

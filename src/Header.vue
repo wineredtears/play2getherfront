@@ -20,7 +20,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Csrf from "@/apis/Csrf.js";
 import axios from "axios";
-import {AUTH_TOKEN, IS_AUTHENTICATED} from "@/constants/localStorage.js";
+import {AUTH_TOKEN, CURRENT_USER_ID, IS_AUTHENTICATED} from "@/constants/localStorage.js";
 import Router from "@/router/index.js";
 
 const username = ref('')
@@ -66,6 +66,7 @@ const logout = async () => {
     username.value = '';
     localStorage.removeItem(AUTH_TOKEN);
     localStorage.removeItem(IS_AUTHENTICATED);
+    localStorage.removeItem(CURRENT_USER_ID);
 
     router.push('/login');
   })
@@ -103,7 +104,7 @@ onMounted(() => {
   background-color: #1e293b; /* dark background */
   color: white;
   padding: 1rem 2rem;
-  width: 80%;
+  width: 100%;
 }
 
 .nav a {
