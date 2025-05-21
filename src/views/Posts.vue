@@ -1,5 +1,6 @@
 <template xmlns="http://www.w3.org/1999/html">
   <div class="post-list">
+    <div class="center-box">
     <h2>Posts in {{ threadName }}</h2>
     <p>By {{ threadAuthor }}</p>
     <button type="button" id="deleteThreadButton" @click="deleteThread" hidden="true"> Delete thread </button>
@@ -27,6 +28,7 @@
         </div>
         <button type="submit" :disabled="loading">Create Post</button>
       </form>
+    </div>
     </div>
   </div>
 </template>
@@ -181,15 +183,27 @@ watch(() => route.params.id, (newId) => {
 </script>
 
 <style scoped>
+
+.center-box {
+  width: 100%;
+  max-width: 1000px;            /* Adjust the width as needed */
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  justify-content: center;
+}
 .post-list {
   padding: 1.5rem;
   list-style-type: none;
+  display: flex;
+  justify-content: center;
 }
 .post-item {
+  text-align: left;
   margin-bottom: 1rem;
   padding: 0.75rem;
   border: 1px solid #d1d5db;
-  width: 75%;
+  width: 880px;
   list-style-type: none;
   background-color: #e5e7eb;
   border-radius: 6px;
@@ -202,7 +216,7 @@ watch(() => route.params.id, (newId) => {
   margin: 2rem;
   padding: 1.5rem;
   border: 1px solid #d1d5db;
-  width: 74%;
+  width: 880px;
   background-color: #e5e7eb;
   border-radius: 6px;
   text-decoration: none;

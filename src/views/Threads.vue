@@ -1,32 +1,34 @@
 <template>
   <div class="thread-list">
-    <h2>Threads in {{ categoryName || categorySlug }}</h2>
-    <br>
+    <div class="center-box">
+        <h2>Threads in {{ categoryName || categorySlug }}</h2>
+        <br>
 
-    <div v-if="loading">Loading threads...</div>
-    <div v-else-if="threads.length === 0">No threads found.</div>
+        <div v-if="loading">Loading threads...</div>
+        <div v-else-if="threads.length === 0">No threads found.</div>
 
-    <ul>
-      <li v-for="thread in threads" :key="thread.id" class="thread-item">
-        <router-link :to="`/thread/${thread.id}`" class="thread-link">
-          <strong>{{ thread.name }}</strong>
-        </router-link><br>
-        Posted by: {{ thread.authorName }}<br>
-        Posts: {{ thread.postCount }}<br>
-        Created at: {{ new Date(thread.createdAt).toLocaleString() }}
-      </li>
-    </ul>
-    <!-- Create New Thread Form -->
-    <div class="create-thread-form">
-      <h3>Create a New Thread</h3>
-      <form @submit.prevent="createThread">
+        <ul>
+          <li v-for="thread in threads" :key="thread.id" class="thread-item">
+            <router-link :to="`/thread/${thread.id}`" class="thread-link">
+              <strong>{{ thread.name }}</strong>
+            </router-link><br>
+            Posted by: {{ thread.authorName }}<br>
+            Posts: {{ thread.postCount }}<br>
+            Created at: {{ new Date(thread.createdAt).toLocaleString() }}
+          </li>
+        </ul>
+        <!-- Create New Thread Form -->
+        <div class="create-thread-form">
+          <h3>Create a New Thread</h3>
+          <form @submit.prevent="createThread">
 
-        <div>
-          <label for="threadName">Thread Name:</label>
-          <input type="text" v-model="newThreadName" id="threadName" required />
+            <div>
+              <label for="threadName">Thread Name:</label>
+              <input type="text" v-model="newThreadName" id="threadName" required />
+            </div>
+            <button type="submit" :disabled="loading">Create Thread</button>
+          </form>
         </div>
-        <button type="submit" :disabled="loading">Create Thread</button>
-      </form>
     </div>
   </div>
 </template>
@@ -151,12 +153,23 @@ const newThreadName = ref('')
 .thread-list {
   padding: 1.5rem;
   list-style-type: none;
+  display: flex;
+  justify-content: center;
+}
+.center-box {
+  width: 100%;
+  max-width: 800px;            /* Adjust the width as needed */
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  justify-content: center;
 }
 .thread-item {
   margin-bottom: 1rem;
+  text-align: left;
   padding: 0.75rem;
   border: 1px solid #d1d5db;
-  width: 75%;
+  width: 680px;
   list-style-type: none;
   background-color: #e5e7eb;
   border-radius: 6px;
@@ -175,7 +188,7 @@ const newThreadName = ref('')
   color: #111827;
   font-weight: 500;
   transition: background-color 0.2s;
-  width: 60%
+  width: 680px;
 }
 
 .create-thread-form form {

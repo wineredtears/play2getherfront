@@ -1,17 +1,19 @@
 <template>
   <div class="home-container">
-    <h2>Games</h2>
-    <br>
+    <div class="center-box">
+      <h2>Games</h2>
+      <br>
 
-    <div v-if="loading">Loading categories...</div>
-    <div v-else-if="categories.length === 0">No categories found.</div>
-    <ul class="category-list">
-      <li v-for="category in categories" :key="category.slug">
-        <router-link :to="`/category/${category.slug}`" class="category-link">
-          {{ category.name }} ({{ category.threadCount }} threads)
-        </router-link>
-      </li>
-    </ul>
+      <div v-if="loading">Loading categories...</div>
+      <div v-else-if="categories.length === 0">No categories found.</div>
+      <ul class="category-list">
+        <li v-for="category in categories" :key="category.slug">
+          <router-link :to="`/category/${category.slug}`" class="category-link">
+            {{ category.name }} ({{ category.threadCount }} threads)
+          </router-link>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -50,12 +52,26 @@ onMounted(async () => {
 
 <style scoped>
 .home-container {
+  display: flex;
+  justify-content: center;     /* Center horizontally */
   padding: 2rem;
+  color:darkblue;
 }
 
 .category-list {
   list-style: none;
   padding: 0;
+}
+
+/* Center box wrapper */
+.center-box {
+  width: 100%;
+  max-width: 600px;            /* Adjust the width as needed */
+  padding: 2rem;
+  border-radius: 8px;
+  background-color: #f9fafb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
 .category-link {
@@ -68,10 +84,10 @@ onMounted(async () => {
   color: #111827;
   font-weight: 500;
   transition: background-color 0.2s;
-  width: 75%;
 }
 
 .category-link:hover {
   background-color: #d1d5db;
 }
+
 </style>
